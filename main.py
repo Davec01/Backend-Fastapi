@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import requests
 import json  # Importar json para procesar las líneas
+import os  # Para leer la variable de entorno PORT
 
 app = FastAPI()
 
@@ -62,3 +63,9 @@ async def ask(request: AskRequest):
         print(f"Error al consultar API externa: {e}")
         raise HTTPException(status_code=500, detail="Error interno del servidor.")
 
+
+# Agrega esta sección al final para manejar el puerto dinámico
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))  # Leer la variable de entorno PORT
+    uvicorn.run(app, host="0.0.0.0", port=port)
